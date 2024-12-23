@@ -2,6 +2,7 @@ package com.jaafarfora.customers.service;
 
 import com.jaafarfora.customers.dao.CustomerDao;
 import com.jaafarfora.customers.dto.CustomerDTO;
+import com.jaafarfora.customers.dto.CustomerDTOMapper;
 import com.jaafarfora.customers.entity.Customer;
 import com.jaafarfora.customers.exception.DuplicateResourceException;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,9 @@ class CustomerServiceTest {
 
     // Given
     CustomerDTO request = new CustomerDTO(null,"firstName", "lastName", "email@email.com", "address");
+    CustomerDTO registred = new CustomerDTO(1L,"firstName", "lastName", "email@email.com", "address");
     when(customerDao.existCustomerByEmail(request.email())).thenReturn(false);
+    when(customerDao.addCustomer(CustomerDTOMapper.INSTANCE.dtoToModel(request))).thenReturn(CustomerDTOMapper.INSTANCE.dtoToModel(registred));
 
     // When
     underTest.registerCustomer(request);
