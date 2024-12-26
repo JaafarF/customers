@@ -1,6 +1,6 @@
 package com.jaafarfora.customers.service;
 
-import com.jaafarfora.customers.dao.CustomerDao;
+import com.jaafarfora.customers.dao.CustomerRepository;
 import com.jaafarfora.customers.dto.CustomerDTO;
 import com.jaafarfora.customers.dto.CustomerDTOMapper;
 import com.jaafarfora.customers.entity.Customer;
@@ -21,13 +21,13 @@ import static org.mockito.Mockito.*;
 class CustomerServiceTest {
 
   @Mock
-  private CustomerDao customerDao;
+  private CustomerRepository customerRepository;
 
-  private CustomerService underTest;
+  private CustomerServiceImpl underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new CustomerService(customerDao);
+    underTest = new CustomerServiceImpl(customerRepository);
   }
 
 
@@ -37,15 +37,15 @@ class CustomerServiceTest {
     // Given
     CustomerDTO request = new CustomerDTO(null,"firstName", "lastName", "email@email.com", "address");
     CustomerDTO registred = new CustomerDTO(1L,"firstName", "lastName", "email@email.com", "address");
-    when(customerDao.existCustomerByEmail(request.email())).thenReturn(false);
-    when(customerDao.addCustomer(CustomerDTOMapper.INSTANCE.dtoToModel(request))).thenReturn(CustomerDTOMapper.INSTANCE.dtoToModel(registred));
+    when(customerRepository.existsByEmail(request.email())).thenReturn(false);
+    when(customerRepository.save(CustomerDTOMapper.INSTANCE.dtoToModel(request))).thenReturn(CustomerDTOMapper.INSTANCE.dtoToModel(registred));
 
     // When
     underTest.registerCustomer(request);
 
     // Then
     ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
-    verify(customerDao).addCustomer(customerArgumentCaptor.capture());
+    verify(customerRepository).save(customerArgumentCaptor.capture());
     Customer capturedCustomer = customerArgumentCaptor.getValue();
 
     assertThat(capturedCustomer.getId()).isNull();
@@ -59,14 +59,14 @@ class CustomerServiceTest {
   void shouldThrowWhenCreateCustomerWithExistingEmail() {
     // Given
     CustomerDTO request = new CustomerDTO(null,"firstName", "lastName", "email@email.com", "address");
-    when(customerDao.existCustomerByEmail(request.email())).thenReturn(true);
+    when(customerRepository.existsByEmail(request.email())).thenReturn(true);
 
     //  Then
     assertThatThrownBy(() -> underTest.registerCustomer(request))
         .isInstanceOf(DuplicateResourceException.class)
         .hasMessage("Customer with this email already exists");
 
-    verify(customerDao, never()).addCustomer(any());
+    verify(customerRepository, never()).save(any());
   }
 
-  }
+}

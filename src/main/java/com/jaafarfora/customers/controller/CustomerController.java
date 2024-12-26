@@ -1,7 +1,7 @@
 package com.jaafarfora.customers.controller;
 
 import com.jaafarfora.customers.dto.CustomerDTO;
-import com.jaafarfora.customers.service.CustomerService;
+import com.jaafarfora.customers.service.CustomerServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/customers")
 public class CustomerController {
 
-  private final CustomerService customerService;
+  private final CustomerServiceImpl customerService;
 
   @GetMapping
   public ResponseEntity<String> findAll() {
