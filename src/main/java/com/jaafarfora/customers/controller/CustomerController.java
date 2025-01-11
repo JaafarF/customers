@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/customers")
@@ -14,9 +16,15 @@ public class CustomerController {
 
   private final CustomerServiceImpl customerService;
 
+  @GetMapping(path = "test")
+  public ResponseEntity<String> testApp() {
+    return ResponseEntity.ok().body("App running!");
+  }
+
   @GetMapping
-  public ResponseEntity<String> findAll() {
-    return ResponseEntity.ok().body("All customers found");
+  public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
+    var dtos = customerService.getAllCustomers();
+    return ResponseEntity.ok().body(dtos);
   }
 
   @PostMapping
