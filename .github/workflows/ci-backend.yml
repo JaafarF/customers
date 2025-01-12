@@ -24,7 +24,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Running Unit Tests
+      - name: Compile project
         run: ./mvnw clean compile
   unit-tests:
     runs-on: ubuntu-latest
@@ -60,4 +60,4 @@ jobs:
           distribution: 'temurin'
 
       - name: Compile project
-        run: ./mvnw clean compile
+        run: ./mvnw clean package -DskipTests
