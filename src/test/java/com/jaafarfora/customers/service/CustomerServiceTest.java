@@ -37,7 +37,7 @@ class CustomerServiceTest {
     // Given
     CustomerDTO request = new CustomerDTO(null,"firstName", "lastName", "email@email.com", "address");
     CustomerDTO registered = new CustomerDTO(1L,"firstName", "lastName", "email@email.com", "address");
-    when(customerRepository.existsByEmail(request.email())).thenReturn(true);
+    when(customerRepository.existsByEmail(request.email())).thenReturn(false);
     when(customerRepository.save(CustomerMapper.convertToEntity(request))).thenReturn(CustomerMapper.convertToEntity(registered));
 
     // When
