@@ -111,7 +111,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build-image ]
     steps:
-
       - name: Create deployment folder
         run: ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
 
