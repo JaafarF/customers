@@ -12,11 +12,18 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - db
+      - spring-demo
     restart: unless-stopped
-
+  customers-api:
+    image: customers/customers:1.0.0
+    ports:
+      - 8080:8080
+    networks:
+      - spring-demo
+    depends_on:
+      - db
 networks:
-  db:
+  spring-demo:
     driver: bridge
 
 volumes:
