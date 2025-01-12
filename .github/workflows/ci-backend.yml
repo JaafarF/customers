@@ -58,6 +58,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: 'maven'
 
       - name: Compile project
         run: ./mvnw clean package -DskipTests
