@@ -38,6 +38,8 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: 'pom.xml'
 
       - name: Running Unit Tests
         run: ./mvnw clean test
@@ -58,5 +60,5 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Compile project
+      - name: Build project
         run: mvn -ntp -B clean package -DskipTests
