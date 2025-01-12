@@ -21,6 +21,8 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: './pom.xml'
 
       - name: Compile project
         run: mvn clean compile
@@ -38,14 +40,8 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-
-      - name: Cache local Maven repository
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: 'maven'
+          cache-dependency-path: './pom.xml'
 
       - name: Running Unit Tests
         run: ./mvnw clean test
