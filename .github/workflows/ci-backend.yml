@@ -77,7 +77,12 @@ jobs:
           distribution: 'temurin'
       - name: Extract project version
         id: extract_version
-        run: echo "VERSION=$(mvn -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
+        run: |
+          VERSION=$(mvn -q \
+            -Dexec.executable="echo" \
+            -Dexec.args='${project.version}' \
+            --non-recursive exec:exec | tr -d '\n')
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 #          echo "VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
 
 #      - name: Login to DockerHub
