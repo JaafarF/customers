@@ -28,7 +28,7 @@ jobs:
           cd book-network
           ./mvnw clean compile
   unit-tests:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Unit tests
     steps:
       - name: Checkout code
@@ -45,7 +45,7 @@ jobs:
       - name: Running Unit Tests
         run: ./mvnw clean test
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Build backend
     needs: [compile, unit-tests]
     steps:
