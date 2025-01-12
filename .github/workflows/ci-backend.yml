@@ -1,7 +1,6 @@
 name: Customers Backend API Pipeline
 
 on:
-  workflow_dispatch:
   pull_request:
     branches:
       - main
