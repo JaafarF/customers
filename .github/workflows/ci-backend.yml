@@ -59,4 +59,4 @@ jobs:
           cache: 'maven'
 
       - name: Compile project
-        run: ./mvnw clean package -DskipTests
+        run: mvn -ntp -B clean package -DskipTests
