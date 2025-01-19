@@ -15,7 +15,7 @@ services:
       - spring-demo
     restart: unless-stopped
   customers-api:
-    image: customers/customers:1.0.0
+    image: jfora/customers
     ports:
       - 8080:8080
     networks:

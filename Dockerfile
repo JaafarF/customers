@@ -19,12 +19,8 @@ ARG APP_VERSION=1.0.0
 
 WORKDIR /app
 
-COPY --from=build /build/target/customers-*.jar /app/
+COPY --from=build /build/target/customers-*.jar /app/app.jar
 
 EXPOSE 8080
 
-ENV DB_URL=jdbc:postgresql://postgres-customers-db:5432/customers
-ENV JAR_VERSION=${APP_VERSION}
-ENV JAR_VERSION=${APP_VERSION}
-
-CMD java -jar -Dspring.datasource.url=${DB_URL} customers-${JAR_VERSION}.jar
+CMD ["java", "-jar", "app.jar"]
