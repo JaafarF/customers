@@ -111,18 +111,22 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build-image ]
     steps:
-      - name: Create deployment folder
-        run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} 
-          "mkdir -p ci-cd"
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Copy docker-compose file
-        run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
+      - name: Set up SSH (to connect to VPS)
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIV_KEY }}
 
-      - name: Set ENV variable and deploy
+      - name: Create Docker secrets on Swarm
         run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
-          cd ci-cd
-          docker compose -f docker-compose.yml pull -q
-          docker compose -f docker-compose.yml up -d
-          EOF
+          echo "$DB_USER" | docker secret create postgres_user -
+          echo "$DB_PASSWORD" | docker secret create postgres_password -
+        env:
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - name: Deploy to Docker Swarm
+        run: |
+          ssh -o StrictHostKeyChecking=no $USER@$HOST "docker stack deploy -c compose.yml customer-api"
