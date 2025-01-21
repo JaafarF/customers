@@ -133,7 +133,7 @@ jobs:
 
       - name: Deploy to Docker Swarm
         run: |
-          ssh -o StrictHostKeyChecking=no $USER@$HOST "docker stack deploy -c ./docker-stack.yml customer-api"
+          ssh -o StrictHostKeyChecking=no $USER@$HOST "docker stack deploy -c ./customers/docker-stack.yml customer-api"
         env:
           USER: ${{ secrets.VPS_USERNAME }}
           HOST: ${{ secrets.VPS_IP }}
