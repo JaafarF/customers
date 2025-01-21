@@ -131,11 +131,12 @@ jobs:
       - name: Create Docker secrets on Swarm
         run: |
           ssh -o StrictHostKeyChecking=no $USER@$HOST << EOF
-            docker secret rm postgres_user || true
-            docker secret rm postgres_password || true
-          
-            echo "$DB_USER" | docker secret create postgres_user -
-            echo "$DB_PASSWORD" | docker secret create postgres_password -
+            if ! docker secret inspect postgres_user > /dev/null 2>&1; then
+              echo "$DB_USER" | docker secret create postgres_user -
+            fi
+            if ! docker secret inspect postgres_password > /dev/null 2>&1; then
+              echo "$DB_PASSWORD" | docker secret create postgres_password -
+            fi
           EOF
         env:
           DB_USER: ${{ secrets.DB_USER }}
