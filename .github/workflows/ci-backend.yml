@@ -116,6 +116,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIV_KEY }}
 
+      - name: Checkout the customers repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure the full history is checked out
+
       - name: Upload docker-stack.yml to VPS
         run: |
           scp -o StrictHostKeyChecking=no ./customers/docker-stack.yml $USER@$HOST:./apps/api/deployments/
