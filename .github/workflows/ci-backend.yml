@@ -114,28 +114,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v1
-
       - name: Set up SSH (to connect to VPS)
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIV_KEY }}
 
-      - name: Initialize Swarm (if not already initialized)
-        run: |
-          if [ "$(docker info --format '{{.Swarm.LocalNodeState}}')" != "active" ]; then
-            docker swarm init
-          fi
-
       - name: Create Docker secrets on Swarm
         run: |
-          echo "$DB_USER" | docker secret create postgres_user -
-          echo "$DB_PASSWORD" | docker secret create postgres_password -
+          ssh -o StrictHostKeyChecking=no $USER@$HOST << EOF
+            echo "$DB_USER" | docker secret create postgres_user -
+            echo "$DB_PASSWORD" | docker secret create postgres_password -
+          EOF
         env:
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          USER: ${{ secrets.VPS_USERNAME }}
+          HOST: ${{ secrets.VPS_IP }}
 
       - name: Deploy to Docker Swarm
         run: |
-          ssh -o StrictHostKeyChecking=no $USER@$HOST "docker stack deploy -c compose.yml customer-api"
+          ssh -o StrictHostKeyChecking=no $USER@$HOST "docker stack deploy -c ./docker-stack.yml customer-api"
+        env:
+          USER: ${{ secrets.VPS_USERNAME }}
+          HOST: ${{ secrets.VPS_IP }}
