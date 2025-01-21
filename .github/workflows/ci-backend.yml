@@ -111,13 +111,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build-image ]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Set up SSH (to connect to VPS)
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIV_KEY }}
+
+      - name: Upload docker-stack.yml to VPS
+        run: |
+          scp -o StrictHostKeyChecking=no ./docker-stack.yml $USER@$HOST:./apps/api/deployments/
+        env:
+          USER: ${{ secrets.VPS_USERNAME }}
+          HOST: ${{ secrets.VPS_IP }}
 
       - name: Create Docker secrets on Swarm
         run: |
@@ -136,7 +140,7 @@ jobs:
 
       - name: Deploy to Docker Swarm
         run: |
-          ssh -o StrictHostKeyChecking=no $USER@$HOST "docker stack deploy -c ./customers/docker-stack.yml customer-api"
+          ssh -o StrictHostKeyChecking=no $USER@$HOST "docker stack deploy -c ./apps/api/deployments/docker-stack.yml customer-api"
         env:
           USER: ${{ secrets.VPS_USERNAME }}
           HOST: ${{ secrets.VPS_IP }}
