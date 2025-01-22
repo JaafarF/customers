@@ -4,8 +4,6 @@ server:
     include-message: always
 
 spring:
-  config:
-    import: "optional:configtree:/etc/config/"
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}:5432/customers
     username: ${POSTGRES_USER_FILE:/run/secrets/postgres_user}
