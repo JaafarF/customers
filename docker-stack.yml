@@ -24,14 +24,6 @@ services:
     restart: unless-stopped
   customers-api:
     image: jfora/customers
-    deploy:
-      replicas: 2
-      update_config:
-        parallelism: 1
-        delay: 10s
-        order: start-first
-      restart_policy:
-        condition: on-failure
     networks:
       - infra_default
     labels:
