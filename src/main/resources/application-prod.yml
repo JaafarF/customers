@@ -6,8 +6,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}:5432/customers
-    username: ${POSTGRES_USER_FILE:default_user}
-    password: ${POSTGRES_PASSWORD_FILE:default_password}
+    username: ${POSTGRES_USER_FILE:/run/secrets/postgres_user}
+    password: ${POSTGRES_PASSWORD_FILE:/run/secrets/postgres_password}
   jpa:
     hibernate:
       ddl-auto: create
