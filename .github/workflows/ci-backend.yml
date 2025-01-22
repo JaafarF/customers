@@ -132,10 +132,10 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no $USER@$HOST << EOF
             if ! docker secret inspect postgres_user > /dev/null 2>&1; then
-              echo -n "$DB_USER" | docker secret create postgres_user -
+              printf "$DB_USER" | docker secret create postgres_user -
             fi
             if ! docker secret inspect postgres_password > /dev/null 2>&1; then
-              echo -n "$DB_PASSWORD" | docker secret create postgres_password -
+              printf "$DB_PASSWORD" | docker secret create postgres_password -
             fi
           EOF
         env:
