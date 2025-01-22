@@ -44,9 +44,9 @@ services:
 
 secrets:
   postgres_user:
-    external: true
+    file: postgres_user.txt
   postgres_password:
-    external: true
+    file: postgres_password.txt
 
 networks:
   infra_default:
