@@ -2,6 +2,11 @@ services:
   postgres-customers-db:
     container_name: postgres-customers-db
     image: postgres
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
     networks:
       - infra_default
     environment:
@@ -19,6 +24,14 @@ services:
     restart: unless-stopped
   customers-api:
     image: jfora/customers
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: on-failure
     networks:
       - infra_default
     labels:
