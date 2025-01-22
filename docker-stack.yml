@@ -10,10 +10,10 @@ services:
     networks:
       - infra_default
     environment:
-      - POSTGRES_USER_FILE=/run/secrets/postgres_user
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
-      - POSTGRES_DB=customers
-      - PGDATA=/data/postgres/customers
+      POSTGRES_USER: ${POSTGRES_USER_FILE}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_FILE}
+      POSTGRES_DB: customers
+      PGDATA: /data/postgres/customers
     secrets:
       - postgres_user
       - postgres_password
@@ -22,6 +22,7 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
+
   customers-api:
     image: jfora/customers
     networks:
@@ -35,9 +36,11 @@ services:
       - postgres_user
       - postgres_password
     environment:
-      - POSTGRES_HOST=postgres-customers-db
-      - POSTGRES_USER_FILE=/run/secrets/postgres_user
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      POSTGRES_HOST: postgres-customers-db
+      POSTGRES_USER: |
+        $(cat /run/secrets/postgres_user)
+      POSTGRES_PASSWORD: |
+        $(cat /run/secrets/postgres_password)
     depends_on:
       - postgres-customers-db
 
