@@ -5,9 +5,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/customers
-    username: customers-db-user
-    password: customers-db-password
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/customers
+    username: ${POSTGRES_USER_FILE}
+    password: ${POSTGRES_PASSWORD_FILE}
   jpa:
     hibernate:
       ddl-auto: create
