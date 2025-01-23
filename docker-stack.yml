@@ -37,6 +37,15 @@ services:
       - postgres_password
     environment:
       POSTGRES_HOST: postgres-customers-db
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    command: >
+      sh -c "
+        export POSTGRES_USER=$(cat /run/secrets/postgres_user) &&
+        export POSTGRES_PASSWORD=$(cat /run/secrets/postgres_password) &&
+        java -jar /path/to/app.jar"
     depends_on:
       - postgres-customers-db
 
