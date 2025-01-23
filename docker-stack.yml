@@ -37,10 +37,6 @@ services:
       - postgres_password
     environment:
       POSTGRES_HOST: postgres-customers-db
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
     command: >
       sh -c "
         export POSTGRES_USER=$$(cat /run/secrets/postgres_user) &&
