@@ -44,8 +44,7 @@ services:
     command: >
       sh -c "
         export POSTGRES_USER=$$(cat /run/secrets/postgres_user) &&
-        export POSTGRES_PASSWORD=$$(cat /run/secrets/postgres_password) &&
-        echo Hello"
+        export POSTGRES_PASSWORD=$$(cat /run/secrets/postgres_password)"
     depends_on:
       - postgres-customers-db
 
